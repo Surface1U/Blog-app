@@ -1,7 +1,7 @@
 <template>
     <div id = "add-blog">
         <h2>Add a new blog</h2>
-        <form>
+        <form v-if="!submitted">
             <label>Blog title: </label>
             <input type = "text" v-model.lazy="blog.title" required/>
             <label> Blog content</label>
@@ -22,7 +22,11 @@
             <select v-model="blog.author">
                 <option v-for = "author in authors">{{ author }}</option>
             </select>
+            <button v-on:click.prevent="post">Add Blog</button>
         </form>
+        <div v-if="submitted">
+          <h3>Fuck u!</h3>
+        </div>
         <div id = "preview">
             <h3>preview blog</h3>
             <p>Blog title: {{ blog.title }}</p>
@@ -35,7 +39,8 @@
             <p>Author: {{ blog.author }}</p>
         </div>
     </div>
-  </template>
+  </template>[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=your-github-username)](https://github.com/anuraghazra/github-readme-stats)
+
 
 
   <script>
@@ -50,11 +55,21 @@
             categories: [],
             author: ""
         },
-        authors:['The Nigger', 'Nigger1', 'I am a not rasist' ]
+        authors:['The Nigger', 'Nigger1', 'I am a not rasist' ],
+        submitted: false,
       }
     },
     methods: {
-
+      post:function(){
+        this.$http.post('http://jsonplaceholder.typicode.com/posts', {
+          title: this.blog.title,
+          body: this.blog.content,
+          userld: 1
+        }).then(function(data){
+          console.log(data);
+          this.submitted = true;
+        });
+      }
     }
   }
 
